@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>English Castle Chatbot</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Tajawal', Arial, sans-serif;
+      background: linear-gradient(135deg, #e0e7ff 0%, #f8fafc 100%);
+      min-height: 100vh;
+      margin: 0;
+      padding: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    #chat {
+      width: 100%;
+      max-width: 420px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(31, 38, 135, 0.15);
+      overflow: hidden;
+      border: 1px solid rgba(99, 102, 241, 0.15);
+      height: 90vh;
+      max-height: 700px;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    #header {
+      background: linear-gradient(90deg, #6366f1 0%, #60a5fa 100%);
+      color: #fff;
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.2);
+      z-index: 10;
+    }
+    
+    #header-content {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    #header img {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: white;
+      padding: 5px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    #header h2 {
+      font-size: 1.3rem;
+      margin: 0;
+      font-weight: 700;
+    }
+    
+    #header p {
+      font-size: 0.8rem;
+      margin: 2px 0 0 0;
+      opacity: 0.9;
+    }
+    
+    #messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px 16px;
+      background: #f3f4f6;
+      scroll-behavior: smooth;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .msg {
+      position: relative;
+      max-width: 85%;
+      padding: 12px 16px;
+      border-radius: 16px;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      word-break: break-word;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .user {
+      background: linear-gradient(90deg, #6366f1 0%, #60a5fa 100%);
+      color: #fff;
+      margin-left: auto;
+      border-bottom-right-radius: 4px;
+      box-shadow: 0 2px 6px rgba(99, 102, 241, 0.2);
+    }
+    
+    .bot {
+      background: #fff;
+      color: #22223b;
+      margin-right: auto;
+      border-bottom-left-radius: 4px;
+      border: 1px solid #e0e7ff;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    }
+    
+    .typing {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 12px 16px;
+      background: white;
+      border-radius: 16px;
+      border-bottom-left-radius: 4px;
+      width: fit-content;
+      margin-right: auto;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      border: 1px solid #e0e7ff;
+    }
+    
+    .typing-dot {
+      width: 8px;
+      height: 8px;
+      background: #6366f1;
+      border-radius: 50%;
+      opacity: 0.6;
+      animation: typing 1.4s infinite ease-in-out;
+    }
+    
+    .typing-dot:nth-child(1) { animation-delay: 0s; }
+    .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+    
+    @keyframes typing {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+    
+    #input-area {
+      display: flex;
+      align-items: center;
+      padding: 12px 14px;
+      background: #fff;
+      border-top: 1px solid rgba(0, 0, 0, 0.06);
+    }
+    
+    #input {
+      flex: 1;
+      height: 44px;
+      padding: 10px 16px;
+      border: 1.5px solid #c7d2fe;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      outline: none;
+      transition: all 0.2s;
+      font-family: 'Tajawal', Arial, sans-serif;
+      background: #f8fafc;
+      margin-left: 10px;
+    }
+    
+    #input:focus {
+      border-color: #6366f1;
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+    }
+    
+    #send {
+      height: 44px;
+      background: linear-gradient(90deg, #6366f1 0%, #60a5fa 100%);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      width: 44px;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 2px 6px rgba(99, 102, 241, 0.2);
+    }
+    
+    #send:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+    }
+    
+    #send:active {
+      transform: translateY(0);
+    }
+    
+    /* Mobile Optimizations */
+    @media (max-width: 480px) {
+      body {
+        padding: 0;
+      }
+      
+      #chat {
+        width: 100%;
+        height: 100vh;
+        max-height: 100vh;
+        border-radius: 0;
+        margin: 0;
+      }
+      
+      #header {
+        padding: 15px;
+      }
+      
+      #header h2 {
+        font-size: 1.1rem;
+      }
+      
+      .msg {
+        font-size: 0.9rem;
+        padding: 10px 14px;
+      }
+      
+      #messages {
+        padding: 15px 12px;
+      }
+      
+      #input-area {
+        padding: 10px 12px;
+      }
+      
+      #input {
+        height: 40px;
+        padding: 8px 12px;
+        font-size: 0.9rem;
+      }
+      
+      #send {
+        height: 40px;
+        width: 40px;
+      }
+    }
+    
+    @media (max-height: 600px) {
+      #messages {
+        height: calc(100vh - 130px);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="chat">
+    <div id="header">
+      <div id="header-content">
+        <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="English Castle Logo">
+        <div>
+          <h2>English Castle</h2>
+          <p>مساعدك الذكي لتعلم اللغة الإنجليزية</p>
+        </div>
+      </div>
+    </div>
+    
+    <div id="messages"></div>
+    
+    <div id="input-area">
+      <input 
+        id="input" 
+        type="text" 
+        placeholder="اكتب سؤالك هنا..." 
+        autocomplete="off" 
+      />
+      <button id="send">
+        <i class="fas fa-paper-plane"></i>
+      </button>
+    </div>
+  </div>
+  
+  <script>
+    const apiKey = "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";
+    const systemMessage = `أنت وكيل مبيعات ودعم ذكي لمعهد English Castle، معهد دولي معتمد يقع في إسطنبول، تركيا، متخصص في تعليم اللغة الإنجليزية بجودة عالية عبر الإنترنت ووجهًا لوجه. مهمتك تقديم معلومات دقيقة ومقنعة عن المعهد وبرامجه وسياساته، والإجابة عن جميع استفسارات العملاء والطلاب المحتملين بطريقة ودودة واحترافية، مع التركيز على إقناعهم بالانضمام للمعهد.
+
+معلومات أساسية عن English Castle:
+- معهد دولي معتمد من وزارة التربية والتعليم التركية، الأول في الشرق الأوسط لتعليم اللغة الإنجليزية، ويقع في قلب إسطنبول.
+- يقدم برامج متنوعة تشمل: اللغة الإنجليزية العامة، دورات المهارات الأكاديمية، الدورات التحضيرية لامتحانات IELTS وTOEFL، دورات اللغة الإنجليزية للأغراض الخاصة (ESP)، دورات تفاعلية للأطفال، وبرنامج اللغة الإنجليزية للأشخاص المشغولين (EBP).
+- سعر الدورة 170 دولار
+- جميع الدورات متاحة عبر الإنترنت ووجهًا لوجه، مع مرونة في أوقات الدراسة (نهارًا ومساءً).
+- المعهد يضم فريقًا من المعلمين المؤهلين وذوي الخبرة، ويقدم بيئة تعليمية تفاعلية وداعمة.
+- يتميز المعهد بتنوع طلابه من مختلف الجنسيات والثقافات، ويطبق نظام تقييم أداء فعال لضمان جودة التعليم.
+- يوفر المعهد موارد حديثة، ودروسًا تكميلية تركز على مهارات التحدث والقراءة والكتابة، وأنشطة ثقافية وورش عمل.
+- يمنح الطلاب شهادات معتمدة بعد اجتياز الدورات بنجاح، ويقدم دورات تحضيرية لامتحانات الكفاءة المعترف بها دوليًا.
+
+البرامج والكورسات:
+- يقدم المعهد كورسات لغة إنجليزية عبر الإنترنت وحضوريًا.
+- دورات تأهيلية لاختبارات التوفل والآيلتس (TOEFL وIELTS).
+- برنامج اللغة الإنجليزية النظام العام:  
+  المستويات: Starter A, Starter B, Beginner A, Beginner B, Elementary A, Elementary B, Skills 1, Pre intermediate A, Pre intermediate B, Skills 2, Intermediate A, Intermediate B, Upper intermediate A, Upper intermediate B, Skills 3, Advanced A, Advanced B, Skills 4, Test Prep Program, TOEFL A / IELTS A, TOEFL B / IELTS B.
+  - مدة كل كورس شهر واحد (4 أسابيع)، يوميًا عدا السبت والأحد، مع أسبوع استراحة بين كل كورسين. مجموع ساعات الكورس الواحد 57 ساعة.
+  - الدبلوم عبارة عن 7 مستويات، كل مستوى يمتد لكورسين (شهرين)، و4 كورسات مهارات (شهر لكل كورس). يشمل كل مستوى قواعد، محادثة، كتابة، واختبارين كتابيين (نصفي ونهائي)، وقراءة قصة ومناقشتها.
+- برنامج اللغة الإنجليزية للمشغولين (EBP):  
+  المستويات: Starter A-D, Beginner A-D, Elementary A-D, Pre-intermediate A-D, Intermediate A-D, Emailing A-B, Upper-Intermediate A-D, Presenting A-B, Advanced A-D, TOEFL A / IELTS A, TOEFL B / IELTS B.
+  - مدة الدورة 4 أسابيع، 3 أيام في الأسبوع (الإثنين، الأربعاء، السبت)، 3 ساعات يوميًا (19:00 - 21:45)، مجموع ساعات الكورس 33 ساعة.
+  - يشمل كل كورس القواعد، المحادثة، الكتابة، واختبارين (نصفي ونهائي)، ولا توجد واجبات خارج الدرس.
+
+- دورات للأطفال: نعم، يقدم المعهد دورات تفاعلية للأطفال. لمزيد من المعلومات، يرجى الاتصال بالأرقام المخصصة.
+
+الأسئلة الشائعة والإجراءات:
+- للالتحاق بالمعهد: التواصل مع أحد أرقام المعهد للتسجيل:  
+  +90 5010757205 (عربية/إنجليزية)  
+  +90 5543318188 (عربية/تركية)
+- اختبار تحديد المستوى: يتكون من قسم كتابي (رابط يُرسل من شؤون الطلاب) وقسم شفهي عبر Zoom.
+- الدفع: عبر بطاقة بنكية، تحويل بنكي، أو حوالات مصرفية لبعض الدول.
+- اختيار الوقت: يختار الطالب الوقت المناسب من الأوقات المتوفرة.
+- اسم المستخدم: يُرسل عبر البريد الإلكتروني بعد التسجيل.
+- موقع المعهد: إسطنبول، شيشلي مجيديا كوي، Fulya Mah Büyükdere Cad No:42 Doğuş İş Hanı Kat:4, 34394 Şişli/İstanbul, Turkey.
+- الانضمام للمنصة:  
+  https://engcastleportal.com/
+  أدخل اسم المستخدم وكلمة المرور، ستجد الدروس ضمن "MY COURSE"، اضغط على الدرس، ثم على رابط Zoom المخصص.
+- نسبة النجاح: 70%، ويجب ألا تقل نسبة الحضور عن 80%.
+- طلب الشهادة: عبر تعبئة الاستمارة على https://engcastle.com/help/index.php وإرفاق صورة جواز السفر.
+- تجميد الدراسة أو تغيير الوقت: غير ممكن بعد بدء الكورس.
+- تقديم شكوى أو اعتراض: عبر الرابط https://engcastle.com/help/index.php
+- إذا واجهت صعوبة في الدفع أو الدخول، تواصل مع شؤون الطلاب على الأرقام أعلاه.
+
+سياسات وضوابط مهمة:
+- الالتزام بحضور الدروس في الوقت المحدد، وتشغيل الكاميرا والميكروفون طوال فترة الدرس.
+- يُسمح للإناث بارتداء النقاب أو الكمامة أثناء الدرس.
+- التحدث باللغة الإنجليزية فقط أثناء الدروس.
+- يعتبر الطالب غائبًا إذا أغلق الكاميرا أو الميكروفون، أو تأخر أكثر من 25 دقيقة عن بداية الدرس.
+- لا يُسمح بالأكل أو الشرب أو الانشغال أثناء الدرس.
+- حل الواجبات بخط اليد وتسليمها في الوقت المحدد.
+- لا يمكن تجميد القيد أو تغيير وقت الدراسة بعد بدء الترم.
+- الدروس عبر الزوم مباشرة وغير مسجلة.
+- احترام الاختلافات الثقافية والدينية وعدم إثارة مواضيع حساسة.
+- توزيع الطلاب في المجموعات يتم بشكل عشوائي من قبل الإدارة.
+
+مهمتك كوكيل:
+- تقديم شرح وافي عن جميع البرامج والدورات، ومساعدة العملاء في اختيار البرنامج الأنسب لهم.
+- توضيح سياسات المعهد والإجابة عن جميع الأسئلة المتعلقة بالتسجيل، الحضور، الشهادات، والامتحانات الدولية (IELTS وTOEFL).
+- إقناع العملاء بالانضمام للمعهد من خلال إبراز نقاط القوة والتميز، مثل جودة التعليم، مرونة البرامج، تنوع المجتمع الطلابي، والدعم المستمر.
+- التعامل مع الاعتراضات أو المخاوف بطريقة احترافية وودية.
+- استخدم اللهجة العامية بشكل ودود
+- لا تسرد له النصوص بشكل كبير الاجابة تكون في سطور قليلة وواضحة وليس عشوائية
+- في حال محاولة المستخدم الخروج عن سياق المحادثة الخاصة بالمنصة اطلب من المستخدم العودة للسياق الرئيسي
+- إذا لم تكن متأكدًا من إجابة سؤال معين، اطلب من العميل التواصل مع الإدارة أو الدعم البشري.
+
+كن دائمًا ودودًا، دقيقًا، وركز على إبراز مزايا English Castle كأفضل خيار لتعلم اللغة الإنجليزية في الشرق الأوسط.`;
+
+    const messagesDiv = document.getElementById('messages');
+    const input = document.getElementById('input');
+    const send = document.getElementById('send');
+
+    let chatHistory = [
+      { role: "system", content: systemMessage }
+    ];
+
+    // أضف رسالة ترحيبية في البداية
+    window.addEventListener('DOMContentLoaded', () => {
+      addMessage('أهلاً بك في English Castle! كيف يمكنني مساعدتك اليوم؟ 😊', 'bot');
+    });
+
+    function addMessage(text, sender) {
+      const msg = document.createElement('div');
+      msg.className = 'msg ' + sender;
+      msg.textContent = text;
+      messagesDiv.appendChild(msg);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+
+    function showTypingIndicator() {
+      const indicator = document.createElement('div');
+      indicator.className = 'typing';
+      indicator.id = 'typing-indicator';
+      
+      for (let i = 0; i < 3; i++) {
+        const dot = document.createElement('div');
+        dot.className = 'typing-dot';
+        indicator.appendChild(dot);
+      }
+      
+      messagesDiv.appendChild(indicator);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+
+    function hideTypingIndicator() {
+      const indicator = document.getElementById('typing-indicator');
+      if (indicator) {
+        indicator.remove();
+      }
+    }
+
+    async function sendMessage() {
+      const userMsg = input.value.trim();
+      if (!userMsg) return;
+      
+      // إضافة رسالة المستخدم
+      addMessage(userMsg, 'user');
+      chatHistory.push({ role: "user", content: userMsg });
+      input.value = '';
+      
+      // إظهار مؤشر الكتابة
+      showTypingIndicator();
+
+      try {
+        // استدعاء OpenAI API
+        const response = await fetch("https://api.openai.com/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + apiKey
+          },
+          body: JSON.stringify({
+            model: "gpt-4.1-mini",
+            messages: chatHistory,
+            temperature: 0.7
+          })
+        });
+
+        // إخفاء مؤشر الكتابة
+        hideTypingIndicator();
+
+        if (!response.ok) {
+          throw new Error("حدث خطأ في الاتصال");
+        }
+
+        const data = await response.json();
+        const botMsg = data.choices[0].message.content;
+        
+        // إضافة رد البوت
+        addMessage(botMsg, 'bot');
+        chatHistory.push({ role: "assistant", content: botMsg });
+      } catch (error) {
+        hideTypingIndicator();
+        addMessage("عذراً، حدث خطأ في الاتصال. يرجى المحاولة مرة أخرى.", 'bot');
+        console.error("Error:", error);
+      }
+    }
+
+    // معالجة النقر على زر الإرسال
+    send.onclick = sendMessage;
+
+    // إرسال الرسالة عند الضغط على Enter
+    input.addEventListener("keydown", function(e) {
+      if (e.key === "Enter") sendMessage();
+    });
+  </script>
+</body>
+</html>

@@ -211,7 +211,7 @@
 
   #chat {
     width: 100%;
-    height: 80vh; /* تصغير عام */
+    height: 60vh; /* تصغير عام */
     max-height: 95vh;
     border-radius: 0;
     margin: 0;
@@ -439,22 +439,6 @@
         console.error("Error:", error);
       }
     }
-
-      // نحفظ الارتفاع الأصلي للشاشة
-  const initialHeight = window.innerHeight;
-  const chat = document.getElementById("chat");
-
-  window.addEventListener("resize", () => {
-    const newHeight = window.innerHeight;
-
-    if (newHeight < initialHeight - 100) {
-      // الكيبورد ظهر، نرفع الشات لفوق
-      chat.style.height = newHeight + "px";
-    } else {
-      // الكيبورد اختفى، نرجع الارتفاع الطبيعي
-      chat.style.height = "100dvh";
-    }
- }
     // معالجة النقر على زر الإرسال
     send.onclick = sendMessage;
 

@@ -204,18 +204,18 @@
     }
     
     /* Mobile Optimizations */
-    @media (max-width: 480px) {
-      body {
-        padding: 0;
-      }
-      
-      #chat {
-        width: 100%;
-        height: 100vh;
-        max-height: 100vh;
-        border-radius: 0;
-        margin: 0;
-      }
+@media (max-width: 480px) {
+  body {
+    padding: 0;
+  }
+
+  #chat {
+    width: 100%;
+    height: 80vh; /* تصغير عام */
+    max-height: 80vh;
+    border-radius: 0;
+    margin: 0;
+  }
       
       #header {
         padding: 15px;
@@ -250,56 +250,7 @@
       }
     }
     
-@media (max-width: 480px) {
-  body {
-    padding: 0;
-  }
 
-  #chat {
-    width: 100%;
-    height: 95vh; /* تصغير عام */
-    max-height: 95vh;
-    border-radius: 0;
-    margin: 0;
-  }
-
-  #header {
-    padding: 10px 12px;
-  }
-
-  #header h2 {
-    font-size: 1rem;
-  }
-
-  #header p {
-    font-size: 0.7rem;
-  }
-
-  .msg {
-    font-size: 0.85rem;
-    padding: 8px 12px;
-  }
-
-  #messages {
-    padding: 10px 10px;
-  }
-
-  #input-area {
-    padding: 8px 10px;
-  }
-
-  #input {
-    height: 36px;
-    padding: 6px 10px;
-    font-size: 0.85rem;
-  }
-
-  #send {
-    height: 36px;
-    width: 36px;
-    font-size: 1rem;
-  }
-}
   </style>
 </head>
 <body>

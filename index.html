@@ -440,6 +440,21 @@
       }
     }
 
+      // نحفظ الارتفاع الأصلي للشاشة
+  const initialHeight = window.innerHeight;
+  const chat = document.getElementById("chat");
+
+  window.addEventListener("resize", () => {
+    const newHeight = window.innerHeight;
+
+    if (newHeight < initialHeight - 100) {
+      // الكيبورد ظهر، نرفع الشات لفوق
+      chat.style.height = newHeight + "px";
+    } else {
+      // الكيبورد اختفى، نرجع الارتفاع الطبيعي
+      chat.style.height = "100dvh";
+    }
+ }
     // معالجة النقر على زر الإرسال
     send.onclick = sendMessage;
 
